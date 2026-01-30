@@ -1,6 +1,6 @@
 # Vultr Kubernetes with Gateway API v1.0.0
 
-Production Vultr VKE cluster with Envoy Gateway, cert-manager, and automated SSL. The cluster is set up to demonstrate installation and use of the Qlik Talend Cloud Dynamic Engine.
+Vultr VKE cluster with Envoy Gateway, cert-manager, and automated SSL. The cluster is set up to demonstrate installation and use of the Qlik Talend Cloud Dynamic Engine.
 
 ## Quick Start
 
