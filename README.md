@@ -59,9 +59,5 @@ cloudflare_api_token = "your-token"
 
 See `docs/MANUAL_DNS.md`
 
-## Cost
-
-~$155/month (3x vc2-4c-8gb + LB + storage)
-
 ---
 **Version 1.0.0** - Vultr Kubernetes with Gateway API
