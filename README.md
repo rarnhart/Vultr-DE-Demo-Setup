@@ -1,5 +1,4 @@
-# Vultr Kubernetes with Envoy Gateway 
-# for Talend Cloud Dynamic Engine
+# Vultr Kubernetes for Talend Cloud Dynamic Engine
 
 Setup of a Vultr VKE cluster with Envoy Gateway, cert-manager, and automated SSL certificates designed to demonstrate deployment and operation of Qlik Talend Cloud Dynamic Engine.
 
