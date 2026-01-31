@@ -30,19 +30,37 @@ cp terraform.tfvars.example terraform.tfvars
 cd ..
 ./scripts/01-deploy-terraform.sh
 ./scripts/02-verify-cluster.sh
+```
 
-# For Talend (two terminals):
-./scripts/03-fix-talend-pvcs.sh <namespace>  # Terminal 1
-helm install talend...                        # Terminal 2
+### Before Installing Talend Dynamic Engine
 
+**⚠️ STOP - Read this before deploying Talend:** See [**Talend Preparation Guide**](docs/TALEND-PREPARATION.md)
+
+The PVC fix script MUST run BEFORE installing Dynamic Engine or you'll need to uninstall and start over.
+
+```bash
+# Terminal 1 - MUST be running first
+./scripts/03-fix-talend-pvcs.sh <namespace>
+
+# Terminal 2 - Only after script is watching
+helm install talend-de <chart> -n <namespace> -f values.yaml
+```
+
+Continue after Talend is installed:
+
+```bash
 ./scripts/04-verify-certificates.sh
 ```
 
-## ⚠️ CRITICAL: Vultr 10GB Minimum
+## ⚠️ CRITICAL: Vultr 10GB Minimum for Talend
 
-**Vultr requires 10GB minimum volumes. Talend requests 1GB = FAILS.**
+**Vultr requires 10GB minimum volumes. Talend Dynamic Engine requests 1GB = Installation FAILS.**
 
-**Solution:** Run `./scripts/03-fix-talend-pvcs.sh <namespace>` BEFORE deploying Talend.
+**You MUST run the PVC fix script BEFORE installing Dynamic Engine.**
+
+See the complete guide: [**Talend Preparation (REQUIRED)**](docs/TALEND-PREPARATION.md)
+
+Skipping this step requires uninstalling Dynamic Engine and starting over.
 
 ## What's Deployed
 
@@ -54,12 +72,12 @@ helm install talend...                        # Terminal 2
 
 ## Scripts
 
-1. `01-deploy-terraform.sh` - Deploy (~15-20 min)
-2. `02-verify-cluster.sh` - Verify components
-3. `03-fix-talend-pvcs.sh` - **Fix Talend PVCs** (10GB)
-4. `04-verify-certificates.sh` - Monitor certs
-5. `05-status.sh` - Quick status
-6. `99-cleanup.sh` - Destroy
+1. `01-deploy-terraform.sh` - Deploy cluster (~15-20 min)
+2. `02-verify-cluster.sh` - Verify all components ready
+3. `03-fix-talend-pvcs.sh` - **REQUIRED before Talend install** - Fixes PVCs for 10GB minimum (see [Talend Prep Guide](docs/TALEND-PREPARATION.md))
+4. `04-verify-certificates.sh` - Monitor certificate issuance
+5. `05-status.sh` - Quick cluster status
+6. `99-cleanup.sh` - Destroy all resources
 
 ## DNS Setup
 
