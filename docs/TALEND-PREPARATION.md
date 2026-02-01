@@ -64,9 +64,67 @@ The script will display:
 ```
 
 **Terminal 2 - Install Dynamic Engine:**
+
+At this point, you'll access the Helm files from TMC or API and apply those as described in the readme.txt file that accompanies them.
+
+Using custom K8s Namespaces is recommended for easy recognition of resources within the K8s Cluster. This is done at creation of a Dynamic Engines and Dynamic Engine Environments.
+
+When creating Dynamic Engines and Environments, you can use the following piece of YAML within a ```de-custom-values.yaml``` file to be included with the Helm installation command.
+
+The following will instruct the installation of Dynamic Engine to use the specified namespace, rather than a randomly generated one.
+
+```yaml
+global:
+  namespace:
+    create: false
+    name: vltr-de-demo
+```
+
+Similarly, when creating Dynamic Engine Environments, you can use the following piece of YAML within a ```dee-custom-values.yaml``` file to be included with the Helm installation command.
+
+```yaml
+global:
+  namespace:
+    create: false
+    name: vltr-de-demo-env
+dynamicEngine:
+  namespace:
+    name: vltr-de-demo      # Must match a namespace of a Dynamic Engine
+configuration:
+  persistence:
+    defaultStorageClassName: vultr-vfs-storage  # StorageClass provided by Vultr
+  dataServiceRouteDeployment:
+    autoscaling:
+      enabled: true
+      minReplicas: 4
+      maxReplicas: 4
+    httpRoute:
+      # Indicates whether an HTTPRoute must be automatically deployed along with the service.
+      # If you set it to true, ensure the name of your gateway that you'll be using, as well
+      # as it's namespace, are included.
+      #
+      autoDeploy: true
+      # the name of the gateway that the http route refers to
+      gatewayName: main-gateway
+      # the namespace where the gateway is located
+      gatewayNamespace: gateway-system
+    additionalValues:
+      deployment:
+        startupProbe:
+          path: /health
+          initialDelaySeconds: 20
+          periodSeconds: 8
+          timeoutSeconds: 1
+          failureThreshold: 6
+```
+
+
+
+
+
+Be sure to include the custom values files when running the Helm commands.
 ```bash
-# Now run your Helm install command
-helm install talend-de <chart> -n <your-de-namespace> -f values.yaml
+helm install de-...-engine --version ${DYNAMIC_ENGINE_VERSION} -f c-m-x-values.yaml -f custom-values.yaml
 ```
 
 ### 4. Monitor the Fix Process
