@@ -1,10 +1,10 @@
-# Preparing for Talend Dynamic Engine Installation
+# Preparing for Talend Dynamic Engine Environment Installation
 
-**CRITICAL:** These preparation steps MUST be completed BEFORE installing Talend Dynamic Engine. Failure to complete these steps will result in PVC creation failures that require uninstalling and reinstalling the Dynamic Engine Helm charts.
+**CRITICAL:** These preparation steps MUST be completed BEFORE installing Talend Dynamic Engine Environments. Failure to complete these steps will result in PVC creation failures that require uninstalling and reinstalling the Dynamic Engine Environments Helm charts.
 
 ## Why This Is Required
 
-Vultr block storage has a **10GB minimum volume size**. Talend Dynamic Engine requests PVCs with 1GB sizes by default, which will fail on Vultr and block the installation.
+Vultr block storage has a **10GB minimum volume size**. Talend Dynamic Engine Environments request PVCs with 1GB sizes by default, which will fail on Vultr and block the installation.
 
 ## Prerequisites
 
@@ -69,9 +69,9 @@ At this point, you'll access the Helm files from TMC or API and apply those as d
 
 Using custom K8s Namespaces is recommended for easy recognition of resources within the K8s Cluster. This is done at creation of a Dynamic Engines and Dynamic Engine Environments.
 
-When creating Dynamic Engines and Environments, you can use the following piece of YAML within a ```de-custom-values.yaml``` file to be included with the Helm installation command.
+When creating Dynamic Engines, you can use the following piece of YAML within a ```de-custom-values.yaml``` file to be included with the Helm installation command.
 
-The following will instruct the installation of Dynamic Engine to use the specified namespace, rather than a randomly generated one.
+The following will instruct the installation of Dynamic Engine to use the specified namespace ```vltr-dem-demo```, rather than a randomly generated one.
 
 ```yaml
 global:
@@ -82,7 +82,7 @@ global:
 
 Similarly, when creating Dynamic Engine Environments, you can use the following piece of YAML within a ```dee-custom-values.yaml``` file to be included with the Helm installation command.
 
-These settings are applied across the entire Dynamic Engine Environment you're creating, so settings for things like autoscaling, probe definitions, etc., as well as other configuration items, will apply to all Jobs, Routes, Data Services, etc. that are deployed to a Dynamic Engine Environment.
+These settings are applied across the entire Dynamic Engine Environment you're creating, so settings for things like autoscaling, probe definitions, etc., as well as other configuration items, will apply to all Jobs, Routes, Data Services, etc. that are deployed to the Dynamic Engine Environment.
 
 If you need different settings to be applied, consider creating additional Dynamic Engine Environments. Remember, Dynamic Engines are designed to have one or more Dynamic Engine Environments.
 
@@ -125,6 +125,8 @@ Be sure to include the custom values files when running the Helm commands.
 helm install de-...-engine --version ${DYNAMIC_ENGINE_VERSION} -f c-m-x-values.yaml -f custom-values.yaml
 ```
 Install the Dynamic Engine first and wait for its status to be green/ready in TMC. Then install Dynamic Engine Environment(s). Always ensure the targeted Dynamic Engine for a new Dynamic Engine Environment is green/ready before installing.
+
+**Remember**, before installation of future Dynamic Engine Environments, you will need to ensure the ```./03-fix-talend-pvcs.sh``` script is running. Use the new Dynamic Engine Environment's Namespace for the input.
 
 ### 4. Monitor the Fix Process
 
