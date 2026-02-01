@@ -43,7 +43,7 @@ The PVC fix script MUST run BEFORE installing Dynamic Engine or you'll need to u
 ./scripts/03-fix-talend-pvcs.sh <namespace>
 
 # Terminal 2 - Only after script is watching
-helm install talend-de <chart> -n <namespace> -f values.yaml
+helm install your-dynamic-engine -f values.yaml
 ```
 
 Continue after Talend is installed:
