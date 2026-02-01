@@ -96,4 +96,4 @@ cloudflare_api_token = "your-token"
 See `docs/MANUAL_DNS.md`
 
 ---
-**Version 1.0.0** - Vultr Kubernetes with Gateway API
+**Version 1.0.0** - Vultr Kubernetes for Talend Cloud Dynamic Engine
