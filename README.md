@@ -7,7 +7,7 @@ Setup of a Vultr VKE cluster with Envoy Gateway, cert-manager, and automated SSL
 This infrastructure-as-code package simplifies the setup and teardown of a complete Kubernetes environment for exposing Web services through Talend Dynamic Engine. By automating the deployment of core infrastructure components (Gateway API, SSL certificates, load balancing), developers can focus on Talend capabilities rather than Kubernetes configuration.
 
 **What this enables:**
-- Deploy Talend Routes, Data Services, RESTful Web Services that designed in Talend Studio
+- Deploy Talend Routes, Data Services, RESTful Web Services that are designed in Talend Studio
 - Expose Web services through Envoy Gateway with automatic SSL configuration
 - Demonstrate Talend Dynamic Engine configuration and capabilities
 - Rapid environment provisioning for testing and development
