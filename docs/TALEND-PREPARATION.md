@@ -55,7 +55,7 @@ cd infra/scripts
 The script will display:
 ```
 ╔════════════════════════════════════════════════════════════╗
-║   Vultr PVC Fix for Talend (10GB Minimum)                 ║
+║   Vultr PVC Fix for Talend (10GB Minimum)                  ║
 ║   Version: 1.0.0                                           ║
 ╚════════════════════════════════════════════════════════════╝
 [i] Namespace: talend-production
