@@ -124,6 +124,7 @@ Be sure to include the custom values files when running the Helm commands.
 ```bash
 helm install de-...-engine --version ${DYNAMIC_ENGINE_VERSION} -f c-m-x-values.yaml -f custom-values.yaml
 ```
+Install the Dynamic Engine first and wait for its status to be green/ready in TMC. Then install Dynamic Engine Environment(s). Always ensure the targeted Dynamic Engine for a new Dynamic Engine Environment is green/ready before installing.
 
 ### 4. Monitor the Fix Process
 
