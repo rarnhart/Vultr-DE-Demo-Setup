@@ -37,7 +37,7 @@ kubectl create namespace <your-de-namespace>
 
 Example:
 ```bash
-kubectl create namespace talend-production
+kubectl create namespace talend-demonstration
 ```
 
 ### 3. Run PVC Fix Script (CRITICAL)
