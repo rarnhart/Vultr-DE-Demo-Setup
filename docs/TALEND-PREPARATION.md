@@ -82,6 +82,10 @@ global:
 
 Similarly, when creating Dynamic Engine Environments, you can use the following piece of YAML within a ```dee-custom-values.yaml``` file to be included with the Helm installation command.
 
+These settings are applied across the entire Dynamic Engine Environment you're creating, so settings for things like autoscaling, probe definitions, etc., as well as other configuration items, will apply to all Jobs, Routes, Data Services, etc. that are deployed to a Dynamic Engine Environment.
+
+If you need different settings to be applied, consider creating additional Dynamic Engine Environments. Remember, Dynamic Engines are designed to have one or more Dynamic Engine Environments.
+
 ```yaml
 global:
   namespace:
@@ -99,14 +103,13 @@ configuration:
       minReplicas: 4
       maxReplicas: 4
     httpRoute:
-      # Indicates whether an HTTPRoute must be automatically deployed along with the service.
-      # If you set it to true, ensure the name of your gateway that you'll be using, as well
-      # as it's namespace, are included.
-      #
+      # AutoDeploy indicates whether an HTTPRoute must be automatically deployed along with the Service that's automatically created.
+      # If true, you must provide the name of the Gateway you'll be using, along with it's Namespace.
+      # If false, the Service will still be created, but HTTPRoutes will have to be defined for Services running in this Dynamic Engine Environment.
       autoDeploy: true
-      # the name of the gateway that the http route refers to
+      # The name of the Gateway the HTTPRoute refers to.
       gatewayName: main-gateway
-      # the namespace where the gateway is located
+      # The Namespace where the above Gateway is located.
       gatewayNamespace: gateway-system
     additionalValues:
       deployment:
@@ -117,11 +120,6 @@ configuration:
           timeoutSeconds: 1
           failureThreshold: 6
 ```
-
-
-
-
-
 Be sure to include the custom values files when running the Helm commands.
 ```bash
 helm install de-...-engine --version ${DYNAMIC_ENGINE_VERSION} -f c-m-x-values.yaml -f custom-values.yaml
