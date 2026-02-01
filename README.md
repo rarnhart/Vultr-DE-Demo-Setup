@@ -32,18 +32,20 @@ cd ..
 ./scripts/02-verify-cluster.sh
 ```
 
-### Before Installing Talend Dynamic Engine
+### Before Installing Talend Dynamic Engine Environments
 
 **⚠️ STOP - Read this before deploying Talend:** See [**Talend Preparation Guide**](docs/TALEND-PREPARATION.md)
 
-The PVC fix script MUST run BEFORE installing Dynamic Engine or you'll need to uninstall and start over.
+The PVC fix script MUST run BEFORE installing Dynamic Engine Environments or you'll need to uninstall and start over.
 
 ```bash
 # Terminal 1 - MUST be running first
 ./scripts/03-fix-talend-pvcs.sh <namespace>
 
 # Terminal 2 - Only after script is watching
-helm install your-dynamic-engine -f values.yaml
+# Here's where you would run the Helm install commands provided in the readme.txt file from the Helm download package from TMC or API
+# helm install dynamic-engine oci://ghcr.io/xxxx --version ${DYNAMIC_ENGINE_VERSION} -f c-m-xx-values.yaml -f de-custom-values.yaml
+#helm install dynamic-engine-environment-xx oci://ghcr.io/xx/xx --version ${DYNAMIC_ENGINE_VERSION} -f xx-values.yaml -f dee-custom-values.yaml
 ```
 
 Continue after Talend is installed:
@@ -54,13 +56,13 @@ Continue after Talend is installed:
 
 ## ⚠️ CRITICAL: Vultr 10GB Minimum for Talend
 
-**Vultr requires 10GB minimum volumes. Talend Dynamic Engine requests 1GB = Installation FAILS.**
+**Vultr requires 10GB minimum volumes. Talend Dynamic Engine Environments requests 1GB = Installation FAILS.**
 
-**You MUST run the PVC fix script BEFORE installing Dynamic Engine.**
+**You MUST run the PVC fix script BEFORE installing Dynamic Engine Environments.**
 
 See the complete guide: [**Talend Preparation (REQUIRED)**](docs/TALEND-PREPARATION.md)
 
-Skipping this step requires uninstalling Dynamic Engine and starting over.
+Skipping this step requires uninstalling Dynamic Engine Environment and starting over.
 
 ## What's Deployed
 
@@ -74,7 +76,7 @@ Skipping this step requires uninstalling Dynamic Engine and starting over.
 
 1. `01-deploy-terraform.sh` - Deploy cluster (~15-20 min)
 2. `02-verify-cluster.sh` - Verify all components ready
-3. `03-fix-talend-pvcs.sh` - **REQUIRED before Talend install** - Fixes PVCs for 10GB minimum (see [Talend Prep Guide](docs/TALEND-PREPARATION.md))
+3. `03-fix-talend-pvcs.sh` - **REQUIRED before Talend Dynamic Engine Environment install** - Fixes PVCs for 10GB minimum (see [Talend Prep Guide](docs/TALEND-PREPARATION.md))
 4. `04-verify-certificates.sh` - Monitor certificate issuance
 5. `05-status.sh` - Quick cluster status
 6. `99-cleanup.sh` - Destroy all resources
