@@ -74,11 +74,32 @@ cd ..
 ./scripts/02-verify-cluster.sh
 ```
 
-### Before Installing Talend Dynamic Engine Environments
+## ⚠️ Before Installing Talend Dynamic Engine Environments
 
-**⚠️ STOP - Read this before deploying Talend:** See [**Talend Preparation Guide**](docs/TALEND-PREPARATION.md)
+**If Using a Custom Container Registry**
 
-The PVC fix script MUST run BEFORE installing Dynamic Engine Environments or you'll need to uninstall and start over.
+If you plan to use a custom container registry for Data Services and Routes, be sure to have the required configuration values readily available to put into the Helm custom values. The values required are:
+- Container registry URL
+- Path (name of the Resposity)
+- Username and Password to connect to the container registry
+
+The ```secretName``` allows you to name the Secret that is created to store your registry connection information
+
+
+
+```yaml
+configuration:
+  registry:
+    url: example.azurecr.io
+    path: tester-app
+    username: username
+    password: password
+    secretName: de-demo-acr-registry
+```
+
+**⚠️ PVC FIX REQUIREMENT** See [**Talend Preparation Guide**](docs/TALEND-PREPARATION.md)
+
+The PVC fix script **MUST run BEFORE** installing Dynamic Engine Environments or you'll need to uninstall and start over.
 
 ```bash
 # Terminal 1 - MUST be running first
@@ -90,21 +111,18 @@ The PVC fix script MUST run BEFORE installing Dynamic Engine Environments or you
 # helm install dynamic-engine-environment-xx oci://ghcr.io/xx/xx --version ${DYNAMIC_ENGINE_VERSION} -f xx-values.yaml -f dee-custom-values.yaml
 ```
 
-Continue after Talend is installed:
+Then, continue after Talend is installed:
 
 ```bash
 ./scripts/04-verify-certificates.sh
 ```
 
 ## ⚠️ CRITICAL: Vultr 10GB Minimum for Talend
+Vultr's ```vultr-vfs-storage``` StorageClass storage type, used by Dynamic Engine Environments, requires 10GB minimum volume-size requests. Talend Dynamic Engine Environments requests 1GB for some volumes, causing installation to stall and fail since the PersistentVolume will not be created.
 
-**Vultr requires 10GB minimum volumes. Talend Dynamic Engine Environments requests 1GB = Installation FAILS.**
+**As referenced in the above section, and in the [**Talend Preparation Guide**](docs/TALEND-PREPARATION.md), you MUST run the PVC fix script BEFORE installing Dynamic Engine Environments.**
 
-**You MUST run the PVC fix script BEFORE installing Dynamic Engine Environments.**
-
-See the complete guide: [**Talend Preparation (REQUIRED)**](docs/TALEND-PREPARATION.md)
-
-Skipping this step requires uninstalling Dynamic Engine Environment and starting over.
+Skipping this step results in errors and requires uninstalling Dynamic Engine Environment and starting over.
 
 ## What's Deployed
 
