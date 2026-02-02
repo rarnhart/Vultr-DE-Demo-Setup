@@ -39,6 +39,25 @@ Example:
 ```bash
 kubectl create namespace talend-demonstration
 ```
+### If Using a Custom Container Registry
+
+If you plan to use a custom container registry for Data Services and Routes, have the required configuration values ready to add to the Helm custom values. The required values are:
+
+- Container registry URL
+- Path (image registry path/repository)
+- Username and password to connect to the container registry
+- The `secretName` allows you to name the Secret that stores your registry connection information
+
+```yaml
+configuration:
+  registry:
+    url: example.azurecr.io
+    path: tester-app/time-api
+    username: username
+    password: password
+    secretName: de-demo-acr-registry
+```
+
 
 ### 3. Run PVC Fix Script (CRITICAL)
 
