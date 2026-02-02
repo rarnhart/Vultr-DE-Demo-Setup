@@ -19,6 +19,47 @@ This infrastructure-as-code package simplifies the setup and teardown of a compl
 - Certificate management complexity
 - Load balancer provisioning
 
+## Conceptual Diagram of Deployment
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│                            INTERNET                             │
+└────────────────────────────────┬────────────────────────────────┘
+                                 │
+                                 │ HTTPS (Let's Encrypt)
+                                 │
+                    ┌────────────▼────────────┐
+                    │   Vultr Load Balancer   │
+                    │  (Auto-created)         │
+                    └────────────┬────────────┘
+                                 │
+              ┌──────────────────▼──────────────────┐
+              │        Envoy Gateway                │
+              │   Listeners: HTTP(80) HTTPS(443)    │
+              │   TLS: gateway-tls secret           │
+              └──────────────────┬──────────────────┘
+                                 │
+              ┌──────────────────▼──────────────────┐
+              │      Gateway (main-gateway)         │
+              │   namespace: gateway-system         │
+              └──────────────────┬──────────────────┘
+                                 │
+              ┌──────────────────▼──────────────────┐
+              │        HTTPRoute                    │
+              │  Hostname: api.lab.tallturtle...    │
+              │  Backend: talend-service:80         │
+              └──────────────────┬──────────────────┘
+                                 │
+              ┌──────────────────▼──────────────────┐
+              │   Kubernetes Service                │
+              │   talend-service:80 → 8080          │
+              └──────────────────┬──────────────────┘
+                                 │
+                    ┌────────────▼────────────┐
+                    │  Talend Dynamic Engine  │
+                    │  Data Services / Routes │
+                    └─────────────────────────┘
+```
+
 
 ## Quick Start
 
