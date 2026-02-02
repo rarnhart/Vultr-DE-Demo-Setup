@@ -259,4 +259,4 @@ Before installing Talend Dynamic Engine:
 
 **Only after completing these steps** should you proceed with configuring routes, SSL certificates, and exposing services through the Gateway.
 
-Official documentation can be found at https://help.qlik.com/talend/en-US/dynamic-engine-configuration-guide/Cloud/set-up-dynamic-engine-on-registered-kubernetes-cluster
+You can find [Official Talend Dynamic Engine documentation](https://help.qlik.com/talend/en-US/dynamic-engine-configuration-guide/Cloud/set-up-dynamic-engine-on-registered-kubernetes-cluster)
