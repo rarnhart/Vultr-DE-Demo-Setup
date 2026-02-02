@@ -85,9 +85,9 @@ The PVC fix script MUST run BEFORE installing Dynamic Engine Environments or you
 ./scripts/03-fix-talend-pvcs.sh <namespace>
 
 # Terminal 2 - Only after script is watching
-# Here's where you would run the Helm install commands provided in the readme.txt file from the Helm download package from TMC or API
+# Here's where you would run the Helm commands provided in the readme.txt file from the Helm download package from TMC or API
 # helm install dynamic-engine oci://ghcr.io/xxxx --version ${DYNAMIC_ENGINE_VERSION} -f c-m-xx-values.yaml -f de-custom-values.yaml
-#helm install dynamic-engine-environment-xx oci://ghcr.io/xx/xx --version ${DYNAMIC_ENGINE_VERSION} -f xx-values.yaml -f dee-custom-values.yaml
+# helm install dynamic-engine-environment-xx oci://ghcr.io/xx/xx --version ${DYNAMIC_ENGINE_VERSION} -f xx-values.yaml -f dee-custom-values.yaml
 ```
 
 Continue after Talend is installed:
