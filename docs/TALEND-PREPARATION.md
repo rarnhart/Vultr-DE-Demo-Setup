@@ -258,3 +258,5 @@ Before installing Talend Dynamic Engine:
 - [ ] After install: All PVCs show 10Gi and Bound status
 
 **Only after completing these steps** should you proceed with configuring routes, SSL certificates, and exposing services through the Gateway.
+
+Official documentation can be found at https://help.qlik.com/talend/en-US/dynamic-engine-configuration-guide/Cloud/set-up-dynamic-engine-on-registered-kubernetes-cluster
