@@ -80,7 +80,7 @@ cd ..
 
 If you plan to use a custom container registry for Data Services and Routes, be sure to have the required configuration values readily available to put into the Helm custom values. The values required are:
 - Container registry URL
-- Path (name of the Resposity)
+- Path (image registry path/repository)
 - Username and Password to connect to the container registry
 
 The ```secretName``` allows you to name the Secret that is created to store your registry connection information
@@ -91,7 +91,7 @@ The ```secretName``` allows you to name the Secret that is created to store your
 configuration:
   registry:
     url: example.azurecr.io
-    path: tester-app
+    path: tester-app/time-api
     username: username
     password: password
     secretName: de-demo-acr-registry
