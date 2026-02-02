@@ -44,8 +44,9 @@ This infrastructure-as-code package simplifies the setup and teardown of a compl
               └──────────────────┬──────────────────┘
                                  │
               ┌──────────────────▼──────────────────┐
-              │        HTTPRoute                    │
-              │  Hostname: api.lab.tallturtle...    │
+              │          HTTPRoute                  |
+              │  (may be auto-created by DEE)       |
+              │  Hostname: api.lab.example...       │
               │  Backend: talend-service:80         │
               └──────────────────┬──────────────────┘
                                  │
