@@ -1,10 +1,10 @@
 # Preparing for Talend Dynamic Engine Environment Installation
 
-**CRITICAL:** These preparation steps MUST be completed BEFORE installing Talend Dynamic Engine Environments. Failure to complete these steps will result in PVC creation failures that require uninstalling and reinstalling the Dynamic Engine Environments Helm charts.
+**⚠️ CRITICAL:** Complete these preparation steps **BEFORE** installing Talend Dynamic Engine Environments. Skipping these steps will result in PVC creation failures that require uninstalling and reinstalling the Dynamic Engine Environments Helm charts.
 
 ## Why This Is Required
 
-Vultr block storage has a **10GB minimum volume size**. Talend Dynamic Engine Environments request PVCs with 1GB sizes by default, which will fail on Vultr and block the installation.
+Vultr block storage has a **10GB minimum volume size**. Talend Dynamic Engine Environments request PVCs with 1GB sizes by default, which Vultr will reject and block the installation.
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ Vultr block storage has a **10GB minimum volume size**. Talend Dynamic Engine En
 
 ## Step-by-Step: Before Installing Dynamic Engine
 
-### 1. Verify Cluster is Ready
+### 1. Verify Cluster Is Ready
 
 Ensure your cluster deployment completed successfully:
 
@@ -27,9 +27,9 @@ All components should show as ready.
 
 ### 2. Create Namespaces for Dynamic Engine and Environments
 
-It's recommended to use custom Kubernentes Namespaces when setting this up, for easy reference.
+Use custom Kubernetes namespaces when setting up for easy reference and resource organization.
 
-These Namespaces will need to be part of the custom Helm values file(s) that you would include during Dynamic Engine and Environments install.
+Include these namespaces in the custom Helm values file(s) during Dynamic Engine and Environment installation.
 
 ```bash
 kubectl create namespace <your-de-namespace>
@@ -44,9 +44,10 @@ kubectl create namespace talend-demonstration
 
 **This step is MANDATORY and must run BEFORE Helm install.**
 
-Open TWO terminal windows:
+Open **two** terminal windows:
 
-**Terminal 1 - Start the PVC watcher:**
+#### Terminal 1 - Start the PVC Watcher
+
 ```bash
 cd infra/scripts
 ./03-fix-talend-pvcs.sh <your-de-namespace>
@@ -63,15 +64,19 @@ The script will display:
 [!] Start your Talend deployment in another terminal NOW
 ```
 
-**Terminal 2 - Install Dynamic Engine:**
+#### Terminal 2 - Install Dynamic Engine
 
-At this point, you'll access the Helm files from TMC or API and apply those as described in the readme.txt file that accompanies them.
+Access the Helm files from TMC or API and apply them as described in the `readme.txt` file that accompanies them.
 
-Using custom K8s Namespaces is recommended for easy recognition of resources within the K8s Cluster. This is done at creation of a Dynamic Engines and Dynamic Engine Environments.
+**Using Custom Kubernetes Namespaces (Recommended)**
 
-When creating Dynamic Engines, you can use the following piece of YAML within a ```de-custom-values.yaml``` file to be included with the Helm installation command.
+Custom namespaces provide easy recognition of resources within the Kubernetes cluster. You specify these during creation of Dynamic Engines and Dynamic Engine Environments.
 
-The following will instruct the installation of Dynamic Engine to use the specified namespace ```vltr-dem-demo```, rather than a randomly generated one.
+**For Dynamic Engine Installation:**
+
+Create a `de-custom-values.yaml` file to include with the Helm installation command. This instructs the installation to use the specified namespace `vltr-de-demo` rather than a randomly generated one.
+
+Here's an example of custom values for a Dynamic Engine:
 
 ```yaml
 global:
@@ -80,11 +85,13 @@ global:
     name: vltr-de-demo
 ```
 
-Similarly, when creating Dynamic Engine Environments, you can use the following piece of YAML within a ```dee-custom-values.yaml``` file to be included with the Helm installation command.
+**For Dynamic Engine Environment Installation:**
 
-These settings are applied across the entire Dynamic Engine Environment you're creating, so settings for things like autoscaling, probe definitions, etc., as well as other configuration items, will apply to all Jobs, Routes, Data Services, etc. that are deployed to the Dynamic Engine Environment.
+Create a `dee-custom-values.yaml` file to include with the Helm installation command. These settings apply across the entire Dynamic Engine Environment you're creating, so configurations for autoscaling, probe definitions, and other items will apply to all Jobs, Routes, and Data Services deployed to this Dynamic Engine Environment.
 
-If you need different settings to be applied, consider creating additional Dynamic Engine Environments. Remember, Dynamic Engines are designed to have one or more Dynamic Engine Environments.
+If you need different settings, consider creating additional Dynamic Engine Environments. Remember, Dynamic Engines support one or more Dynamic Engine Environments.
+
+Here's an example of custom values for a Dynamic Engine Environment:
 
 ```yaml
 global:
@@ -103,13 +110,13 @@ configuration:
       minReplicas: 4
       maxReplicas: 4
     httpRoute:
-      # AutoDeploy indicates whether an HTTPRoute must be automatically deployed along with the Service that's automatically created.
-      # If true, you must provide the name of the Gateway you'll be using, along with it's Namespace.
-      # If false, the Service will still be created, but HTTPRoutes will have to be defined for Services running in this Dynamic Engine Environment.
+      # AutoDeploy indicates whether an HTTPRoute is automatically deployed with the Service
+      # If true, you must provide the Gateway name and its namespace
+      # If false, the Service will still be created, but you'll need to define HTTPRoutes manually
       autoDeploy: true
-      # The name of the Gateway the HTTPRoute refers to.
+      # The name of the Gateway the HTTPRoute refers to
       gatewayName: main-gateway
-      # The Namespace where the above Gateway is located.
+      # The namespace where the Gateway is located
       gatewayNamespace: gateway-system
     additionalValues:
       deployment:
@@ -120,13 +127,24 @@ configuration:
           timeoutSeconds: 1
           failureThreshold: 6
 ```
-Be sure to include the custom values files when running the Helm commands.
-```bash
-helm install de-...-engine --version ${DYNAMIC_ENGINE_VERSION} -f c-m-x-values.yaml -f custom-values.yaml
-```
-Install the Dynamic Engine first and wait for its status to be green/ready in TMC. Then install Dynamic Engine Environment(s). Always ensure the targeted Dynamic Engine for a new Dynamic Engine Environment is green/ready before installing.
 
-**Remember**, before installation of future Dynamic Engine Environments, you will need to ensure the ```./03-fix-talend-pvcs.sh``` script is running. Use the new Dynamic Engine Environment's Namespace for the input.
+**Include the custom values files when running the Helm commands:**
+
+```bash
+helm install de-...-engine \
+  --version ${DYNAMIC_ENGINE_VERSION} \
+  -f c-m-x-values.yaml \
+  -f de-custom-values.yaml
+```
+
+**Installation Order:**
+
+1. Install the Dynamic Engine first
+2. Wait for its status to be green/ready in TMC
+3. Install Dynamic Engine Environment(s)
+4. Always ensure the target Dynamic Engine is green/ready before installing an Environment
+
+**Remember:** Before installing future Dynamic Engine Environments, ensure the `./03-fix-talend-pvcs.sh` script is running. Use the new Dynamic Engine Environment's namespace as input.
 
 ### 4. Monitor the Fix Process
 
@@ -179,17 +197,17 @@ docker-registry        10Gi   Bound
 **Problem:**
 - Talend creates 1Gi PVCs
 - Vultr rejects them (10GB minimum)
-- PVCs remain in `Pending` state forever
+- PVCs remain in `Pending` state indefinitely
 - Dynamic Engine pods cannot start
 
 **Fix Required:**
-1. Uninstall Dynamic Engine Helm release
+1. Uninstall the Dynamic Engine Helm release
 2. Delete all pending PVCs manually
 3. Start over with the PVC fix script running FIRST
 
 ## Troubleshooting
 
-### Script shows no output
+### Script Shows No Output
 
 **Verify namespace exists:**
 ```bash
@@ -210,7 +228,7 @@ brew install jq
 sudo apt-get install jq
 ```
 
-### PVCs still show 1Gi after script runs
+### PVCs Still Show 1Gi After Script Runs
 
 The script may not have caught them during creation. Manually fix:
 
@@ -222,7 +240,7 @@ kubectl delete pvc <pvc-name> -n <your-de-namespace>
 # Or manually recreate with 10Gi size
 ```
 
-### Script exits with "command not found"
+### Script Exits with "Command Not Found"
 
 Ensure you're running bash (not sh):
 ```bash
@@ -239,4 +257,4 @@ Before installing Talend Dynamic Engine:
 - [ ] Terminal 2: Ready to run Helm install
 - [ ] After install: All PVCs show 10Gi and Bound status
 
-**Only after these steps are complete** should you proceed with configuring routes, SSL certificates, and exposing services through the Gateway.
+**Only after completing these steps** should you proceed with configuring routes, SSL certificates, and exposing services through the Gateway.
